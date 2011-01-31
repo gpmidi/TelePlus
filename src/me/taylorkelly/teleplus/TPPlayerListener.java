@@ -32,9 +32,9 @@ public class TPPlayerListener extends PlayerListener {
             if (block == null) {
                 player.sendMessage(ChatColor.RED + "Not pointing to valid block");
             } else {
-                int x = block.getX();
-                int y = block.getY() + 1;
-                int z = block.getZ();
+                double x = block.getX() + 0.5;
+                double y = block.getY() + 1;
+                double z = block.getZ() + 0.5;
                 World world = block.getWorld();
                 Location loc = new Location(world, x, y, z, player.getLocation().getYaw(), player.getLocation().getPitch());
                 Teleporter tp = new Teleporter(loc);

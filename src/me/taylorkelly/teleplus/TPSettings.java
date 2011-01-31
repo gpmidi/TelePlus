@@ -11,12 +11,6 @@ public class TPSettings {
     
     private static final String settingsFile = "TelePlus.yml";
     
-    public static boolean nonAdminsCanJump;
-    public static boolean nonAdminsCanTP;
-    public static boolean nonAdminsCanTPToOthers;
-    public static boolean nonAdminsCanTPOthers;
-
-    
     public static void initialize(File dataFolder) {
         if(!dataFolder.exists()) {
             dataFolder.mkdirs();
@@ -24,14 +18,8 @@ public class TPSettings {
 
         File configFile  = new File(dataFolder, settingsFile);
         if(!configFile.exists()) {
-            createSettingsFile(configFile);
+            configFile.delete();
         }
-        Configuration config = new Configuration(configFile);
-        config.load();
-        nonAdminsCanJump = config.getBoolean("nonAdminsCanJump", true);
-        nonAdminsCanTP = config.getBoolean("nonAdminsCanTP", true);
-        nonAdminsCanTPToOthers = config.getBoolean("nonAdminsCanTPToOthers", false);
-        nonAdminsCanTPOthers = config.getBoolean("nonAdminsCanTPOthers", false);
 
     }
 
@@ -42,13 +30,6 @@ public class TPSettings {
             configFile.createNewFile();
             fwriter = new FileWriter(configFile, true);
             bwriter = new BufferedWriter(fwriter);
-            bwriter.write("nonAdminsCanJump: true");
-            bwriter.newLine();
-            bwriter.write("nonAdminsCanTP: true");
-            bwriter.newLine();
-            bwriter.write("nonAdminsCanTPToOthers: false");
-            bwriter.newLine();
-            bwriter.write("nonAdminsCanTPOthers: false");
             bwriter.flush();
         } catch (IOException e) {
             e.printStackTrace();
