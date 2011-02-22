@@ -1,6 +1,5 @@
 package me.taylorkelly.teleplus;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,7 +7,6 @@ import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -16,8 +14,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
-import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.PluginLoader;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class TelePlus extends JavaPlugin {
@@ -28,14 +24,8 @@ public class TelePlus extends JavaPlugin {
     public final String version = this.getDescription().getVersion();
     private HashMap<String, Boolean> jtoggle;
 
-    public TelePlus(PluginLoader pluginLoader, Server instance, PluginDescriptionFile desc, File folder, File plugin, ClassLoader cLoader) {
-        super(pluginLoader, instance, desc, folder, plugin, cLoader);
-        // TODO Auto-generated constructor stub
-    }
-
     @Override
     public void onDisable() {
-        // TODO Auto-generated method stub
     }
 
     @Override
