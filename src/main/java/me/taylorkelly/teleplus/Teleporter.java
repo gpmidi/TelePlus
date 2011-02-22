@@ -3,7 +3,6 @@ package me.taylorkelly.teleplus;
 import java.util.ArrayList;
 
 import org.bukkit.*;
-import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.entity.Player;
 
 public class Teleporter {
@@ -25,9 +24,9 @@ public class Teleporter {
 		if (y < 1)
 			y = 1;
 
-		if(!((CraftWorld)world).getHandle().A.a(destination.getBlockX() >> 4, destination.getBlockZ() >> 4)) {	
-		    ((CraftWorld)world).getHandle().A.d(destination.getBlockX() >> 4, destination.getBlockZ() >> 4);
-		}
+                if(!world.isChunkLoaded(destination.getBlockX() >> 4, destination.getBlockZ() >> 4)) {
+                    world.loadChunk(destination.getBlockX() >> 4, destination.getBlockZ() >> 4);
+                }
 
 		while (blockIsAboveAir(world, x, y, z)) {
 			y--;
