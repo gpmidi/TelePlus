@@ -62,6 +62,14 @@ public class TelePermissions {
         }
     }
 
+    public static boolean world(Player player) {
+        if (permissionsEnabled) {
+            return permission(player, "tplus.tp.world");
+        } else {
+            return true;
+        }
+    }
+
     public static boolean up(Player player) {
         if (permissionsEnabled) {
             return permission(player, "tplus.jump.up");

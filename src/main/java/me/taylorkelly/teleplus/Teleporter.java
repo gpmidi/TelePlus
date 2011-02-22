@@ -38,7 +38,7 @@ public class Teleporter {
 		if(verbose) {
 			if (destination.getY() != y) {
 				for (Player player : players) {
-					player.sendMessage("Supplied y location not safe.");
+					player.sendMessage("Supplied y location (" + (int)destination.getY() +  ") not safe.");
 					player.sendMessage("Teleporting you to (" + (int) x + ", " + (int) y + ", " + (int) z + ")");
 				}
 			} else {

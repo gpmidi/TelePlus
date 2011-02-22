@@ -20,8 +20,8 @@ public class TelePlus extends JavaPlugin {
 
     private TPPlayerListener playerListener;
     public static final Logger log = Logger.getLogger("Minecraft");
-    public final String name = this.getDescription().getName();
-    public final String version = this.getDescription().getVersion();
+    public String name;
+    public String version;
     private HashMap<String, Boolean> jtoggle;
 
     @Override
@@ -30,6 +30,9 @@ public class TelePlus extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        name = this.getDescription().getName();
+        version = this.getDescription().getVersion();
+
         TPSettings.initialize(getDataFolder());
         TelePermissions.initialize(getServer());
         jtoggle = new HashMap<String, Boolean>();
@@ -58,19 +61,7 @@ public class TelePlus extends JavaPlugin {
                     Teleporter tp = new Teleporter(loc);
                     tp.addTeleportee(player);
                     tp.teleport();
-                    /**
-                     * /tp <world>
-                     */
-                } else if (split.length == 1 && TelePermissions.coords(player)) {
-                    World world = getServer().getWorld(split[0]);
-                    if (world == null) {
-                        player.sendMessage(ChatColor.RED + "Not a valid world.");
-                    } else {
-                        Location loc = new Location(world, player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ(), player.getLocation().getYaw(), player.getLocation().getPitch());
-                        Teleporter tp = new Teleporter(loc);
-                        tp.addTeleportee(player);
-                        tp.teleport();
-                    }
+
                     /**
                      * /tp up
                      */
@@ -152,9 +143,10 @@ public class TelePlus extends JavaPlugin {
                     }
                     if (TelePermissions.coords(player)) {
                         messages.add(ChatColor.RED + "/tp <x> <y> <z>" + ChatColor.WHITE + "  -  Teleport to " + ChatColor.GRAY + "<x> <y> <z>");
+                    }
+                    if (TelePermissions.world(player)) {
                         messages.add(ChatColor.RED + "/tp <world>" + ChatColor.WHITE + "  -  Teleport to " + ChatColor.GRAY + "<world>" + ChatColor.WHITE + " with same parallel coordinates");
-                        messages.add(ChatColor.RED + "/tp <world> <x> <y> <z>" + ChatColor.WHITE + "  -  Teleport to " + ChatColor.GRAY + "<x> <y> <z>" + ChatColor.WHITE + " at world " + ChatColor.GRAY + "<world>" );
-
+                        messages.add(ChatColor.RED + "/tp <world> <x> <y> <z>" + ChatColor.WHITE + "  -  Teleport to " + ChatColor.GRAY + "<x> <y> <z>" + ChatColor.WHITE + " at world " + ChatColor.GRAY + "<world>");
                     }
                     if (TelePermissions.up(player)) {
                         messages.add(ChatColor.RED + "/tp up" + ChatColor.WHITE + "  -  Teleports you to the block highest above you");
@@ -182,11 +174,11 @@ public class TelePlus extends JavaPlugin {
                         player.sendMessage(message);
                     }
                     /**
-                     * /tp <player>
+                     * /tp <player> and /tp <world>
                      */
-                } else if (split.length == 1 && TelePermissions.toPlayer(player)) {
+                } else if (split.length == 1 && (TelePermissions.toPlayer(player) || TelePermissions.world(player))) {
                     List<Player> targets = getServer().matchPlayer(split[0]);
-                    if (targets.size() == 1) {
+                    if (targets.size() == 1 && TelePermissions.toPlayer(player)) {
                         Player target = targets.get(0);
                         Location loc = new Location(target.getWorld(), target.getLocation().getX(), target.getLocation().getY(), target.getLocation().getZ(),
                                 target.getLocation().getYaw(), target.getLocation().getPitch());
@@ -195,13 +187,23 @@ public class TelePlus extends JavaPlugin {
                         tp.setVerbose(false);
                         tp.teleport();
                     } else {
-                        player.sendMessage(ChatColor.RED + split[0] + " did not match a player, cancelling teleport");
+                        World world = getServer().getWorld(split[0]);
+                        if (world == null && TelePermissions.world(player)) {
+                            player.sendMessage(ChatColor.RED + "Not a valid world or player.");
+                        } else if (TelePermissions.world(player)) {
+                            Location loc = new Location(world, player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ(), player.getLocation().getYaw(), player.getLocation().getPitch());
+                            Teleporter tp = new Teleporter(loc);
+                            tp.addTeleportee(player);
+                            tp.teleport();
+                        } else {
+                            player.sendMessage(ChatColor.RED + split[0] + " did not match a player, cancelling teleport");
+                        }
                     }
                     /**
                      * /tp <world> <x> <y> <z>
                      */
                 } else if (split.length == 4 && isNumber(split[1]) && isNumber(split[2]) && isNumber(split[3])
-                        && TelePermissions.coords(player)) {
+                        && TelePermissions.world(player)) {
                     World world = getServer().getWorld(split[0]);
                     if (world == null) {
                         player.sendMessage(ChatColor.RED + "Not a valid world.");
