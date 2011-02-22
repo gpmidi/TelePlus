@@ -3,10 +3,7 @@ package me.taylorkelly.teleplus;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.minecraft.server.MathHelper;
-
 import org.bukkit.Server;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
